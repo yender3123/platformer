@@ -18,13 +18,25 @@ background_rect = background.get_rect()
 class Player:
     def __init__(self):
         self.image = pygame.image.load('images/player1.png')
+
         self.image = pygame.transform.scale(self.image, (50, 70))
         self.rect = self.image.get_rect()
         self.gravity = 0
-
+        self.images_right = []
+        self.images_left = []
+        self. index = 0
+        self.counter = 0
+        self.direction = 0
         self.jumped = False
         self.rect.x = 100
         self.rect.y = 130
+        for num in range(1, 5):
+            img_right = pygame.image.load(f'images/player{num}.png')
+            img_right = pygame.transform.scale(img_right, (35, 70))
+            img_left = pygame.transform.flip(img_right, True, False)
+            self.images_right.append(img_right)
+            self.images_left.append(img_left)
+        self.image = self.images_right[self.index]
 
     def update(self):
         x = 0
@@ -39,7 +51,7 @@ class Player:
             self.direction = -1
             self.counter += 1
         if key[pygame.K_RIGHT]:
-            x -= 5
+            x += 5
             self.direction = 1
             self.counter += 1
 
