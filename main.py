@@ -98,8 +98,7 @@ class Player:
             self.rect.x += x
             self.rect.y += y
 
-            if pygame.sprite.spritecollide(self, lava_group, False):
-                game_over = -1
+
 
         elif game_over == -1:
             print('Game over')
@@ -123,17 +122,19 @@ class World:
                     img_rect.y = row_count * tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
-                # elif tile == 3:
-                #     lava = Lava(col_count * tile_size,
-                #                 row_count * tile_size + (tile_size // 2))
-                #     lava_group.add(lava)
+                elif tile == 3:
+                    lava = Lava(col_count * tile_size,
+                                row_count * tile_size + (tile_size // 2))
+                    lava_group.add(lava)
                 col_count += 1
             row_count += 1
             
     def draw(self):
         for tile in self.tile_list:
             display.blit(tile[0], tile[1])
+
 with open('./levels/level1.json', 'r') as data:
+
     world_data = json.load(data)
 world = World(world_data)
 
@@ -142,7 +143,7 @@ player = Player()
 class Lava(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        img = pygame.image.load('tiles/Lava 1.png')
+        img = pygame.image.load('./tiles/Lava_1.png')
         self.image = pygame.transform.scale(img,
                                             (tile_size, tile_size // 2))
         self.rect = self.image.get_rect()
@@ -150,19 +151,19 @@ class Lava(pygame.sprite.Sprite):
         self.rect.y = y
 lava_group = pygame.sprite.Group()
 
-
 run = True
 while run:
     clock.tick(fps)
     display.blit(background, background_rect)
-
-    player.update()
     world.draw()
     lava_group.draw(display)
+    player.update()
+    lava_group.update()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
 
-    lava_group.update()
+
     pygame.display.update()
 pygame.quit()
